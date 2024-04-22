@@ -272,12 +272,12 @@ bool ExynosDevice::isFirstValidate(ExynosDisplay *display)
 
         if (mDisplays[i]->mRenderingStateFlags.validateFlag) {
             HDEBUGLOGD(eDebugResourceManager, "\t%s is not first validate, %s is validated",
-                    display->mDisplayName.string(), mDisplays[i]->mDisplayName.string());
+                    display->mDisplayName.c_str(), mDisplays[i]->mDisplayName.c_str());
             return false;
         }
     }
 
-    HDEBUGLOGD(eDebugResourceManager, "\t%s is the first validate", display->mDisplayName.string());
+    HDEBUGLOGD(eDebugResourceManager, "\t%s is the first validate", display->mDisplayName.c_str());
     return true;
 }
 
@@ -304,11 +304,11 @@ bool ExynosDevice::isLastValidate(ExynosDisplay *display)
 
         if (mDisplays[i]->mRenderingStateFlags.validateFlag == false) {
             HDEBUGLOGD(eDebugResourceManager, "\t%s is not last validate, %s is not validated",
-                    display->mDisplayName.string(), mDisplays[i]->mDisplayName.string());
+                    display->mDisplayName.c_str(), mDisplays[i]->mDisplayName.c_str());
             return false;
         }
     }
-    HDEBUGLOGD(eDebugResourceManager, "\t%s is the last validate", display->mDisplayName.string());
+    HDEBUGLOGD(eDebugResourceManager, "\t%s is the last validate", display->mDisplayName.c_str());
     return true;
 }
 
@@ -335,11 +335,11 @@ bool ExynosDevice::isLastPresent(ExynosDisplay *display)
 
         if (mDisplays[i]->mRenderingStateFlags.presentFlag == false) {
             HDEBUGLOGD(eDebugResourceManager, "\t%s is not last present, %s is not presented",
-                    display->mDisplayName.string(), mDisplays[i]->mDisplayName.string());
+                    display->mDisplayName.c_str(), mDisplays[i]->mDisplayName.c_str());
             return false;
         }
     }
-    HDEBUGLOGD(eDebugResourceManager, "\t%s is the last present", display->mDisplayName.string());
+    HDEBUGLOGD(eDebugResourceManager, "\t%s is the last present", display->mDisplayName.c_str());
     return true;
 }
 
@@ -517,7 +517,7 @@ void ExynosDevice::dump(uint32_t *outSize, char *outBuffer) {
         if (*outSize > result.size())
             copySize = (uint32_t)result.size();
         ALOGI("HWC dump:: resultSize(%zu), outSize(%d), copySize(%d)", result.size(), *outSize, copySize);
-        strlcpy(outBuffer, result.string(), copySize);
+        strlcpy(outBuffer, result.c_str(), copySize);
     }
 
     return;
@@ -896,7 +896,7 @@ bool ExynosDevice::validateFences(ExynosDisplay *display) {
     if (!validateFencePerFrame(display)) {
         String8 errString;
         errString.appendFormat("Per frame fence leak!\n");
-        ALOGE("%s", errString.string());
+        ALOGE("%s", errString.c_str());
         saveFenceTrace(display);
         return false;
     }
@@ -1021,7 +1021,7 @@ int32_t ExynosDevice::validateDisplays(ExynosDisplay* firstDisplay,
                  */
                 HDEBUGLOGD(eDebugResourceManager,
                         "%s:: validate is skipped in validateDisplays (mNeedSkipPresent is set)",
-                        mDisplays[i]->mDisplayName.string());
+                        mDisplays[i]->mDisplayName.c_str());
                 continue;
             }
             displayRet = mDisplays[i]->validateDisplay(&tmpOutNumTypes, &tmpNumRequests);

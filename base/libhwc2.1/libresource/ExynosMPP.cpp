@@ -762,7 +762,7 @@ bool ExynosMPP::ResourceManageThread::threadLoop()
     if (mExynosMPP == NULL)
         return false;
 
-    ALOGI("%s threadLoop is started", mExynosMPP->mName.string());
+    ALOGI("%s threadLoop is started", mExynosMPP->mName.c_str());
     while(mRunning) {
         Mutex::Autolock lock(mMutex);
         while((mFreedBuffers.size() == 0) &&
@@ -779,7 +779,7 @@ bool ExynosMPP::ResourceManageThread::threadLoop()
             if ((mStateFences.size() != 0) &&
                     (mExynosMPP->mHWState != MPP_HW_STATE_RUNNING)) {
                 ALOGW("%s, mHWState(%d) but mStateFences size(%zu)",
-                        mExynosMPP->mName.string(), mExynosMPP->mHWState,
+                        mExynosMPP->mName.c_str(), mExynosMPP->mHWState,
                         mStateFences.size());
                 checkStateFences();
             }
@@ -835,7 +835,7 @@ bool ExynosMPP::ResourceManageThread::checkStateFences()
         if (fence_valid(fence)) {
             if (sync_wait(fence, 5000) < 0) {
                 HWC_LOGE(NULL, "%s::[%s][%d] sync_wait(%d) error(%s)", __func__,
-                        mExynosMPP->mName.string(), mExynosMPP->mLogicalIndex, fence, strerror(errno));
+                        mExynosMPP->mName.c_str(), mExynosMPP->mLogicalIndex, fence, strerror(errno));
                 ret = false;
             }
             fence = fence_close(fence, mExynosMPP->mAssignedDisplay,
@@ -2849,7 +2849,7 @@ void ExynosMPP::dump(String8& result)
         assignedDisplayType = mAssignedDisplay->mType;
 
     result.appendFormat("%s: types mppType(%d), (p:%d, l:0x%2x), indexs(p:%d, l:%d), preAssignDisplay(0x%2x)\n",
-            mName.string(), mMPPType, mPhysicalType, mLogicalType, mPhysicalIndex, mLogicalIndex, mPreAssignDisplayInfo);
+            mName.c_str(), mMPPType, mPhysicalType, mLogicalType, mPhysicalIndex, mLogicalIndex, mPreAssignDisplayInfo);
     result.appendFormat("\tEnable(by debug): %d, Disable(by scenario):%d, HWState: %d, AssignedState: %d, assignedDisplay(%d)\n",
             mEnableByDebug, mDisableByUserScenario, mHWState, mAssignedState, assignedDisplayType);
     result.appendFormat("\tPrevAssignedState: %d, PrevAssignedDisplayType: %d, ReservedDisplay: %d\n",

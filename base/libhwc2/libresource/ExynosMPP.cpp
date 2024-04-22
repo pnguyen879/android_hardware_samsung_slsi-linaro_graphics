@@ -558,7 +558,7 @@ bool ExynosMPP::ResourceManageThread::threadLoop()
     if (mExynosMPP == NULL)
         return false;
 
-    ALOGI("%s threadLoop is started", mExynosMPP->mName.string());
+    ALOGI("%s threadLoop is started", mExynosMPP->mName.c_str());
     while(mRunning) {
         {
             Mutex::Autolock lock(mMutex);
@@ -576,7 +576,7 @@ bool ExynosMPP::ResourceManageThread::threadLoop()
                 if ((mStateFences.size() != 0) &&
                     (mExynosMPP->mHWState != MPP_HW_STATE_RUNNING)) {
                     ALOGW("%s, mHWState(%d) but mStateFences size(%zu)",
-                            mExynosMPP->mName.string(), mExynosMPP->mHWState,
+                            mExynosMPP->mName.c_str(), mExynosMPP->mHWState,
                             mStateFences.size());
                     checkStateFences();
                 }
@@ -607,26 +607,26 @@ void ExynosMPP::ResourceManageThread::freeBuffers()
         if (mExynosMPP->mPhysicalType == MPP_MSC) {
             if (fence_valid(freeBuffer.mppImg.acquireFenceFd) >= 0) {
                 if (sync_wait(freeBuffer.mppImg.acquireFenceFd, 1000) < 0)
-                    HWC_LOGE(NULL, "%s:: acquire fence sync_wait error", mExynosMPP->mName.string());
+                    HWC_LOGE(NULL, "%s:: acquire fence sync_wait error", mExynosMPP->mName.c_str());
                 freeBuffer.mppImg.acquireFenceFd = fence_close(freeBuffer.mppImg.acquireFenceFd,
                         mExynosMPP->mAssignedDisplay, FENCE_TYPE_SRC_ACQUIRE, FENCE_IP_MSC);
             }
             if (fence_valid(freeBuffer.mppImg.releaseFenceFd)) {
                 if (sync_wait(freeBuffer.mppImg.releaseFenceFd, 1000) < 0)
-                    HWC_LOGE(NULL, "%s:: release fence sync_wait error", mExynosMPP->mName.string());
+                    HWC_LOGE(NULL, "%s:: release fence sync_wait error", mExynosMPP->mName.c_str());
                 freeBuffer.mppImg.releaseFenceFd = fence_close(freeBuffer.mppImg.releaseFenceFd,
                         mExynosMPP->mAssignedDisplay, FENCE_TYPE_SRC_RELEASE, FENCE_IP_MSC);
             }
         } else {
             if (fence_valid(freeBuffer.acrylicAcquireFenceFd)) {
                 if (sync_wait(freeBuffer.acrylicAcquireFenceFd, 1000) < 0)
-                    HWC_LOGE(NULL, "%s:: acquire fence sync_wait error", mExynosMPP->mName.string());
+                    HWC_LOGE(NULL, "%s:: acquire fence sync_wait error", mExynosMPP->mName.c_str());
                 freeBuffer.acrylicAcquireFenceFd = fence_close(freeBuffer.acrylicAcquireFenceFd,
                         mExynosMPP->mAssignedDisplay, FENCE_TYPE_SRC_ACQUIRE, FENCE_IP_ALL);
             }
             if (fence_valid(freeBuffer.acrylicReleaseFenceFd)) {
                 if (sync_wait(freeBuffer.acrylicReleaseFenceFd, 1000) < 0)
-                    HWC_LOGE(NULL, "%s:: release fence sync_wait error", mExynosMPP->mName.string());
+                    HWC_LOGE(NULL, "%s:: release fence sync_wait error", mExynosMPP->mName.c_str());
                 freeBuffer.acrylicReleaseFenceFd = fence_close(freeBuffer.acrylicReleaseFenceFd,
                         mExynosMPP->mAssignedDisplay, FENCE_TYPE_SRC_RELEASE, FENCE_IP_ALL);
             }
@@ -656,7 +656,7 @@ bool ExynosMPP::ResourceManageThread::checkStateFences()
         if (fence_valid(fence) >= 0) {
             if (sync_wait(fence, 5000) < 0) {
                 HWC_LOGE(NULL, "%s::[%s][%d] sync_wait(%d) error(%s)", __func__,
-                        mExynosMPP->mName.string(), mExynosMPP->mLogicalIndex, fence, strerror(errno));
+                        mExynosMPP->mName.c_str(), mExynosMPP->mLogicalIndex, fence, strerror(errno));
                 ret = false;
             }
             fence = fence_close(fence, mExynosMPP->mAssignedDisplay, FENCE_TYPE_ALL, FENCE_IP_ALL);
@@ -2533,7 +2533,7 @@ void ExynosMPP::dump(String8& result)
         assignedDisplayType = mAssignedDisplay->mType;
 
     result.appendFormat("%s: types mppType(%d), (p:%d, l:0x%2x), indexs(p:%d, l:%d), preAssignDisplay(0x%2x)\n",
-            mName.string(), mMPPType, mPhysicalType, mLogicalType, mPhysicalIndex, mLogicalIndex, mPreAssignDisplayList);
+            mName.c_str(), mMPPType, mPhysicalType, mLogicalType, mPhysicalIndex, mLogicalIndex, mPreAssignDisplayList);
     result.appendFormat("\tEnable: %d, HWState: %d, AssignedState: %d, assignedDisplay(%d)\n",
             mEnable, mHWState, mAssignedState, assignedDisplayType);
     result.appendFormat("\tPrevAssignedState: %d, PrevAssignedDisplayType: %d, ReservedDisplay: %d\n",

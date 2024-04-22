@@ -130,9 +130,9 @@ void ExynosCompositionInfo::dump(String8& result)
         if ((mOtfMPP == NULL) && (mM2mMPP == NULL))
             result.appendFormat("\tresource is not assigned\n\n");
         if (mOtfMPP != NULL)
-            result.appendFormat("\tassignedMPP: %s\n", mOtfMPP->mName.string());
+            result.appendFormat("\tassignedMPP: %s\n", mOtfMPP->mName.c_str());
         if (mM2mMPP != NULL)
-            result.appendFormat("\t%s\n\n", mM2mMPP->mName.string());
+            result.appendFormat("\t%s\n\n", mM2mMPP->mName.c_str());
     }
     if (mTargetBuffer != NULL) {
         uint64_t internal_format = 0;
@@ -773,7 +773,7 @@ int ExynosDisplay::handleStaticLayers(ExynosCompositionInfo& compositionInfo)
                     android::String8 result;
                     result.appendFormat("config[%zu]\n", i);
                     dumpConfig(result, config[i]);
-                    DISPLAY_LOGE("%s", result.string());
+                    DISPLAY_LOGE("%s", result.c_str());
                 }
                 DISPLAY_LOGE("compositionInfo.mLastConfig config [%d, %d, %d]",
                         compositionInfo.mLastConfig.fd_idma[0],
@@ -1585,24 +1585,24 @@ void ExynosDisplay::printDebugInfos(String8 &reason)
             localTime->tm_hour, localTime->tm_min,
             localTime->tm_sec, tv.tv_usec/1000,
             ((tv.tv_sec * 1000) + (tv.tv_usec / 1000)));
-    ALOGD("%s", reason.string());
+    ALOGD("%s", reason.c_str());
 
     if (mErrorFrameCount >= HWC_PRINT_FRAME_NUM)
         writeFile = false;
     else {
         char filePath[128];
-        sprintf(filePath, "%s/%s_hwc_debug%d.dump", ERROR_LOG_PATH0, mDisplayName.string(), (int)mErrorFrameCount);
+        sprintf(filePath, "%s/%s_hwc_debug%d.dump", ERROR_LOG_PATH0, mDisplayName.c_str(), (int)mErrorFrameCount);
         pFile = fopen(filePath, "wb");
         if (pFile == NULL) {
             ALOGE("Fail to open file %s, error: %s", filePath, strerror(errno));
-            sprintf(filePath, "%s/%s_hwc_debug%d.dump", ERROR_LOG_PATH1, mDisplayName.string(), (int)mErrorFrameCount);
+            sprintf(filePath, "%s/%s_hwc_debug%d.dump", ERROR_LOG_PATH1, mDisplayName.c_str(), (int)mErrorFrameCount);
             pFile = fopen(filePath, "wb");
         }
         if (pFile == NULL) {
             ALOGE("Fail to open file %s, error: %s", filePath, strerror(errno));
         } else {
             ALOGI("%s was created", filePath);
-            fwrite(reason.string(), 1, reason.size(), pFile);
+            fwrite(reason.c_str(), 1, reason.size(), pFile);
         }
     }
     mErrorFrameCount++;
@@ -1618,9 +1618,9 @@ void ExynosDisplay::printDebugInfos(String8 &reason)
             dumpLayer(result, hwLayer);
         }
     }
-    ALOGD("%s", result.string());
+    ALOGD("%s", result.c_str());
     if (pFile != NULL) {
-        fwrite(result.string(), 1, result.size(), pFile);
+        fwrite(result.c_str(), 1, result.size(), pFile);
     }
     result.clear();
 
@@ -1629,17 +1629,17 @@ void ExynosDisplay::printDebugInfos(String8 &reason)
     ExynosCompositionInfo exynosCompInfo = mExynosCompositionInfo;
     clientCompInfo.dump(result);
     exynosCompInfo.dump(result);
-    ALOGD("%s", result.string());
+    ALOGD("%s", result.c_str());
     if (pFile != NULL) {
-        fwrite(result.string(), 1, result.size(), pFile);
+        fwrite(result.c_str(), 1, result.size(), pFile);
     }
     result.clear();
 
     result.appendFormat("=======================  dump exynos layers (%zu)  ================================\n",
             mLayers.size());
-    ALOGD("%s", result.string());
+    ALOGD("%s", result.c_str());
     if (pFile != NULL) {
-        fwrite(result.string(), 1, result.size(), pFile);
+        fwrite(result.c_str(), 1, result.size(), pFile);
     }
     result.clear();
     for (uint32_t i = 0; i < mLayers.size(); i++) {
@@ -1647,16 +1647,16 @@ void ExynosDisplay::printDebugInfos(String8 &reason)
         layer->printLayer();
         if (pFile != NULL) {
             layer->dump(result);
-            fwrite(result.string(), 1, result.size(), pFile);
+            fwrite(result.c_str(), 1, result.size(), pFile);
             result.clear();
         }
     }
 
     if (mWinConfigData != NULL) {
         result.appendFormat("=============================  dump win configs  ===================================\n");
-        ALOGD("%s", result.string());
+        ALOGD("%s", result.c_str());
         if (pFile != NULL) {
-            fwrite(result.string(), 1, result.size(), pFile);
+            fwrite(result.c_str(), 1, result.size(), pFile);
         }
         result.clear();
         struct decon_win_config *config = mWinConfigData->config;
@@ -1666,7 +1666,7 @@ void ExynosDisplay::printDebugInfos(String8 &reason)
             if (pFile != NULL) {
                 result.appendFormat("config[%zu]\n", i);
                 dumpConfig(result, config[i]);
-                fwrite(result.string(), 1, result.size(), pFile);
+                fwrite(result.c_str(), 1, result.size(), pFile);
                 result.clear();
             }
         }
@@ -3104,7 +3104,7 @@ int32_t ExynosDisplay::addExynosCompositionLayer(uint32_t layerIndex)
             if ((ret = m2mMPP->assignMPP(this, layer)) != NO_ERROR)
             {
                 HWC_LOGE(this, "%s:: %s MPP assignMPP() error (%d)",
-                        __func__, m2mMPP->mName.string(), ret);
+                        __func__, m2mMPP->mName.c_str(), ret);
                 return ret;
             }
             mExynosCompositionInfo.mFirstIndex = min(mExynosCompositionInfo.mFirstIndex, (int32_t)i);
@@ -3140,7 +3140,7 @@ int32_t ExynosDisplay::addExynosCompositionLayer(uint32_t layerIndex)
                 if ((ret = m2mMPP->assignMPP(this, mLayers[maxPriorityIndex])) != NO_ERROR)
                 {
                     ALOGE("%s:: %s MPP assignMPP() error (%d)",
-                            __func__, m2mMPP->mName.string(), ret);
+                            __func__, m2mMPP->mName.c_str(), ret);
                     return ret;
                 }
             }

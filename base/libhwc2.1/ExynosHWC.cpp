@@ -511,10 +511,10 @@ int32_t exynos_presentDisplay(hwc2_device_t *dev, hwc2_display_t display,
         int32_t ret = 0;
         if (exynosDisplay->mHWCRenderingState == RENDERING_STATE_VALIDATED) {
             ALOGI("%s:: acceptDisplayChanges was not called",
-                    exynosDisplay->mDisplayName.string());
+                    exynosDisplay->mDisplayName.c_str());
             if (exynosDisplay->acceptDisplayChanges() != HWC2_ERROR_NONE) {
                 ALOGE("%s:: acceptDisplayChanges is failed",
-                        exynosDisplay->mDisplayName.string());
+                        exynosDisplay->mDisplayName.c_str());
             }
         }
 
@@ -930,7 +930,7 @@ int32_t exynos_validateDisplay(hwc2_device_t *dev, hwc2_display_t display,
         } else {
             if (exynosDisplay->mRenderingStateFlags.validateFlag) {
                 HDEBUGLOGD(eDebugResourceManager, "%s is already validated",
-                        exynosDisplay->mDisplayName.string());
+                        exynosDisplay->mDisplayName.c_str());
 
                 /*
                  * HWC doesn't skip this frame in validate, present time.
@@ -968,7 +968,7 @@ int32_t exynos_validateDisplay(hwc2_device_t *dev, hwc2_display_t display,
                 exynosDisplay->mRenderingState = RENDERING_STATE_VALIDATED;
             } else {
                 HDEBUGLOGD(eDebugResourceManager, "%s is power on after first validate",
-                        exynosDisplay->mDisplayName.string());
+                        exynosDisplay->mDisplayName.c_str());
                 /*
                  * This display was not validated in first validate time.
                  * It means that power is on after first validate time.

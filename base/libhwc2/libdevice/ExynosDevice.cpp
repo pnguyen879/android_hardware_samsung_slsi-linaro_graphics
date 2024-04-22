@@ -586,7 +586,7 @@ void ExynosDevice::dump(uint32_t *outSize, char *outBuffer) {
         if (*outSize > result.size())
             copySize = (uint32_t)result.size();
         ALOGI("HWC dump:: resultSize(%zu), outSize(%d), copySize(%d)", result.size(), *outSize, copySize);
-        strlcpy(outBuffer, result.string(), copySize);
+        strlcpy(outBuffer, result.c_str(), copySize);
     }
 
     return;

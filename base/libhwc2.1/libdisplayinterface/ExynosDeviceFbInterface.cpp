@@ -229,7 +229,7 @@ int32_t ExynosDeviceFbInterface::makeDPURestrictions() {
                 resourceManager->makeFormatRestrictions(queried_format_table[cnt], r.format[j]);
                 cnt++;
             }
-            HDEBUGLOGD(eDebugAttrSetting, "%s : %d", getMPPStr(hwType).string(), r.format[j]);
+            HDEBUGLOGD(eDebugAttrSetting, "%s : %d", getMPPStr(hwType).c_str(), r.format[j]);
         }
     }
 

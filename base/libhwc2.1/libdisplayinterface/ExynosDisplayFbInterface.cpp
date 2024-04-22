@@ -304,7 +304,7 @@ int32_t ExynosDisplayFbInterface::getHdrCapabilities(uint32_t* outNumTypes,
         mExynosDisplay->mMaxAverageLuminance = *outMaxAverageLuminance;
         mExynosDisplay->mMinLuminance = *outMinLuminance;
         ALOGI("%s: hdrTypeNum(%d), maxLuminance(%f), maxAverageLuminance(%f), minLuminance(%f)",
-                mExynosDisplay->mDisplayName.string(), mExynosDisplay->mHdrTypeNum, mExynosDisplay->mMaxLuminance,
+                mExynosDisplay->mDisplayName.c_str(), mExynosDisplay->mHdrTypeNum, mExynosDisplay->mMaxLuminance,
                 mExynosDisplay->mMaxAverageLuminance, mExynosDisplay->mMinLuminance);
         return 0;
     }
@@ -322,7 +322,7 @@ int32_t ExynosDisplayFbInterface::getHdrCapabilities(uint32_t* outNumTypes,
         // Save to member variables
         mExynosDisplay->mHdrTypes[i] = (android_hdr_t)outData.out_types[i];
         HDEBUGLOGD(eDebugHWC, "%s HWC2: Types : %d",
-                mExynosDisplay->mDisplayName.string(), mExynosDisplay->mHdrTypes[i]);
+                mExynosDisplay->mDisplayName.c_str(), mExynosDisplay->mHdrTypes[i]);
     }
     return 0;
 }
@@ -363,7 +363,7 @@ int32_t ExynosDisplayFbInterface::deliverWinConfigData()
         } else if ((config[i].idma_type = getDeconDMAType(display_config.assignedMPP))
                 == MAX_DECON_DMA_TYPE) {
             HWC_LOGE(mExynosDisplay, "%s:: config [%d] has invalid idma_type, assignedMPP(%s)",
-                    __func__, i, display_config.assignedMPP->mName.string());
+                    __func__, i, display_config.assignedMPP->mName.c_str());
             return -EINVAL;
         }
 
@@ -427,7 +427,7 @@ int32_t ExynosDisplayFbInterface::deliverWinConfigData()
     if (ret) {
         result.clear();
         result.appendFormat("WIN_CONFIG ioctl error\n");
-        HWC_LOGE(mExynosDisplay, "%s", dumpFbWinConfigInfo(result, mFbConfigData).string());
+        HWC_LOGE(mExynosDisplay, "%s", dumpFbWinConfigInfo(result, mFbConfigData).c_str());
     } else {
         mExynosDisplay->mDpuData.retire_fence = mFbConfigData.retire_fence;
         struct decon_win_config *config = mFbConfigData.config;
@@ -710,7 +710,7 @@ String8& ExynosDisplayFbInterface::dumpFbWinConfigInfo(String8 &result,
         }
 
         if (debugPrint)
-            ALOGD("%s", configString.string());
+            ALOGD("%s", configString.c_str());
         else
             result.append(configString);
     }
@@ -891,7 +891,7 @@ void ExynosPrimaryDisplayFbInterface::init(ExynosDisplay *exynosDisplay)
 {
     mDisplayFd = open(exynosDisplay->mDeconNodeName, O_RDWR);
     if (mDisplayFd < 0)
-        ALOGE("%s:: %s failed to open framebuffer", __func__, exynosDisplay->mDisplayName.string());
+        ALOGE("%s:: %s failed to open framebuffer", __func__, exynosDisplay->mDisplayName.c_str());
 
     mExynosDisplay = exynosDisplay;
     mPrimaryDisplay = (ExynosPrimaryDisplay *)exynosDisplay;
@@ -1128,7 +1128,7 @@ void ExynosPrimaryDisplayFbInterface::getDisplayHWInfo() {
     mPrimaryDisplay->mMinLuminance = (float)outInfo.min_luminance / (float)10000;
 
     ALOGI("%s: hdrTypeNum(%d), maxLuminance(%f), maxAverageLuminance(%f), minLuminance(%f)",
-            mPrimaryDisplay->mDisplayName.string(), mPrimaryDisplay->mHdrTypeNum,
+            mPrimaryDisplay->mDisplayName.c_str(), mPrimaryDisplay->mHdrTypeNum,
             mPrimaryDisplay->mMaxLuminance, mPrimaryDisplay->mMaxAverageLuminance,
             mPrimaryDisplay->mMinLuminance);
 
@@ -1260,7 +1260,7 @@ void ExynosExternalDisplayFbInterface::init(ExynosDisplay *exynosDisplay)
 
     mDisplayFd = open(mExternalDisplay->mDeconNodeName, O_RDWR);
     if (mDisplayFd < 0)
-        ALOGE("%s:: %s failed to open framebuffer", __func__, mExternalDisplay->mDisplayName.string());
+        ALOGE("%s:: %s failed to open framebuffer", __func__, mExternalDisplay->mDisplayName.c_str());
 
     memset(&dv_timings, 0, sizeof(dv_timings));
 }
@@ -1299,7 +1299,7 @@ int32_t ExynosExternalDisplayFbInterface::getDisplayAttribute(
 
     default:
         HWC_LOGE(mExternalDisplay, "%s unknown display attribute %u",
-                mExternalDisplay->mDisplayName.string(), attribute);
+                mExternalDisplay->mDisplayName.c_str(), attribute);
         return HWC2_ERROR_BAD_CONFIG;
     }
 
@@ -1325,7 +1325,7 @@ int32_t ExynosExternalDisplayFbInterface::getDisplayConfigs(
         dp_data.state = dp_data.EXYNOS_DISPLAYPORT_STATE_PRESET;
         if(ioctl(this->mDisplayFd, EXYNOS_SET_DISPLAYPORT_CONFIG, &dp_data) <0) {
             HWC_LOGE(mExternalDisplay, "%s fail to send selected config data, %d",
-                    mExternalDisplay->mDisplayName.string(), errno);
+                    mExternalDisplay->mDisplayName.c_str(), errno);
             return -1;
         }
 
@@ -1369,7 +1369,7 @@ int32_t ExynosExternalDisplayFbInterface::getDisplayConfigs(
 
     if (mConfigurations.size() == 0){
         HWC_LOGE(mExternalDisplay, "%s do not receivce any configuration info",
-                mExternalDisplay->mDisplayName.string());
+                mExternalDisplay->mDisplayName.c_str());
         mExternalDisplay->closeExternalDisplay();
         return -1;
     }
@@ -1470,7 +1470,7 @@ int32_t ExynosExternalDisplayFbInterface::getHdrCapabilities(
         mExternalDisplay->mMaxAverageLuminance = *outMaxAverageLuminance;
         mExternalDisplay->mMinLuminance = *outMinLuminance;
         ALOGI("%s: hdrTypeNum(%d), maxLuminance(%f), maxAverageLuminance(%f), minLuminance(%f), externalHdrSupported(%d)",
-                mExternalDisplay->mDisplayName.string(), mExternalDisplay->mHdrTypeNum,
+                mExternalDisplay->mDisplayName.c_str(), mExternalDisplay->mHdrTypeNum,
                 mExternalDisplay->mMaxLuminance, mExternalDisplay->mMaxAverageLuminance,
                 mExternalDisplay->mMinLuminance, mExternalDisplay->mExternalHdrSupported);
         return 0;

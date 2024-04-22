@@ -420,7 +420,7 @@ void dumpExynosImage(uint32_t type, exynos_image &img)
     if (!hwcCheckDebugMessages(type))
         return;
     ALOGD("\tbufferHandle: %p, fullWidth: %d, fullHeight: %d, x: %d, y: %d, w: %d, h: %d, format: %s",
-            img.bufferHandle, img.fullWidth, img.fullHeight, img.x, img.y, img.w, img.h, getFormatStr(img.format).string());
+            img.bufferHandle, img.fullWidth, img.fullHeight, img.x, img.y, img.w, img.h, getFormatStr(img.format).c_str());
     ALOGD("\tusageFlags: 0x%" PRIx64 ", layerFlags: 0x%8x, acquireFenceFd: %d, releaseFenceFd: %d",
             img.usageFlags, img.layerFlags, img.acquireFenceFd, img.releaseFenceFd);
     ALOGD("\tdataSpace(%d), blending(%d), transform(0x%2x), compressed(%d)",
@@ -430,7 +430,7 @@ void dumpExynosImage(uint32_t type, exynos_image &img)
 void dumpExynosImage(String8& result, exynos_image &img)
 {
     result.appendFormat("\tbufferHandle: %p, fullWidth: %d, fullHeight: %d, x: %d, y: %d, w: %d, h: %d, format: %s\n",
-            img.bufferHandle, img.fullWidth, img.fullHeight, img.x, img.y, img.w, img.h, getFormatStr(img.format).string());
+            img.bufferHandle, img.fullWidth, img.fullHeight, img.x, img.y, img.w, img.h, getFormatStr(img.format).c_str());
     result.appendFormat("\tusageFlags: 0x%" PRIx64 ", layerFlags: 0x%8x, acquireFenceFd: %d, releaseFenceFd: %d\n",
             img.usageFlags, img.layerFlags, img.acquireFenceFd, img.releaseFenceFd);
     result.appendFormat("\tdataSpace(%d), blending(%d), transform(0x%2x), compressed(%d)\n",
@@ -864,7 +864,7 @@ void printLeakFds(ExynosDisplay *display){
                 errStringPlus.appendFormat("\n");
         }
     }
-    FT_LOGI("%s", errStringPlus.string());
+    FT_LOGI("%s", errStringPlus.c_str());
 
     errStringMinus.appendFormat("Leak Fds (-1) :\n");
 
@@ -878,7 +878,7 @@ void printLeakFds(ExynosDisplay *display){
                 errStringMinus.appendFormat("\n");
         }
     }
-    FT_LOGI("%s", errStringMinus.string());
+    FT_LOGI("%s", errStringMinus.c_str());
 }
 
 void dumpNCheckLeak(ExynosDisplay *display, int32_t __unused depth) {
